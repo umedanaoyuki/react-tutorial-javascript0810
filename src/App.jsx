@@ -1,9 +1,5 @@
 import "./style.css";
 
-function Square({ value }) {
-  return <button className="square">{value}</button>;
-}
-
 export default function Board() {
   return (
     <>
@@ -23,5 +19,16 @@ export default function Board() {
         <Square value="9" />
       </div>
     </>
+  );
+}
+
+function Square({ value }) {
+  function handleClick() {
+    console.log("clicked");
+  }
+  return (
+    <button className="square" onClick={handleClick}>
+      {value}
+    </button>
   );
 }
