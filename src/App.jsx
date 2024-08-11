@@ -2,9 +2,6 @@ import { useState } from "react";
 import "./style.css";
 
 export default function Game() {
-  // 先手がデフォルトで “X” になるようにするためのstate（次に表示されるのがXかどうかを判断するための状態）
-  const [xIsNext, setXIsNext] = useState(true);
-
   // 要素数が 1 の配列であり、その唯一の要素が 9 つの null が入った配列
   const [history, setHistory] = useState([Array(9).fill(null)]);
 
@@ -14,19 +11,18 @@ export default function Game() {
   // 現在の盤面
   const currentSquares = history[currentMove];
 
+  const xIsNext = currentMove % 2 === 0;
+
   function handlePlay(nextSquares) {
     // 履歴を書き換える（戻ったところまでの履歴までは保存して、その後の履歴は消す）
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
-    setXIsNext(!xIsNext);
   }
 
   // 過去の履歴に戻る
   function jumpTo(nextMove) {
     setCurrentMove(nextMove);
-    // currentMove を変更する数値が偶数の場合は、xIsNext を true に設定
-    setXIsNext(nextMove % 2 === 0);
   }
 
   const moves = history.map((squares, move) => {
