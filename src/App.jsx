@@ -10,7 +10,8 @@ export default function Board() {
 
   function handleClick(i) {
     // すでにマス目に表記があれば何もしない（早期リターン）
-    if (squares[i]) {
+    // 勝者がいる場合(trueで返される)は早期リターン
+    if (squares[i] || calculateWinner(squares)) {
       return;
     }
 
@@ -29,8 +30,19 @@ export default function Board() {
     setXIsNext(!xIsNext);
   }
 
+  // 勝者
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) {
+    status = "Winner:" + winner;
+  } else {
+    const next = xIsNext ? "X" : "0";
+    status = "Next player: " + next;
+  }
+
   return (
     <>
+      <div className="status">{status}</div>
       <div className="board-row">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
         <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
@@ -50,6 +62,9 @@ export default function Board() {
   );
 }
 
+/**
+ * 勝者を返す関数の作成
+ */
 function calculateWinner(squares) {
   // 勝ちになるマス目の２次元配列
   const lines = [
@@ -71,6 +86,7 @@ function calculateWinner(squares) {
       return squares[a];
     }
   }
+  return;
 }
 
 function Square({ value, onSquareClick }) {
