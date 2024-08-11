@@ -1,7 +1,20 @@
 import { useState } from "react";
 import "./style.css";
 
-export default function Board() {
+export default function Game() {
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+    </div>
+  );
+}
+
+function Board() {
   // 先手がデフォルトで “X” になるようにするためのstate（次に表示されるのがXかどうかを判断するための状態）
   const [xIsNext, setXIsNext] = useState(true);
 
