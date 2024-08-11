@@ -2,24 +2,63 @@ import { useState } from "react";
 import "./style.css";
 
 export default function Game() {
+  // 先手がデフォルトで “X” になるようにするためのstate（次に表示されるのがXかどうかを判断するための状態）
+  const [xIsNext, setXIsNext] = useState(true);
+
+  // 要素数が 1 の配列であり、その唯一の要素が 9 つの null が入った配列
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+
+  // ユーザーが現在見ている現在のmove
+  const [currentMove, setCurrentMove] = useState(0);
+
+  // 現在の盤面
+  const currentSquares = history[currentMove];
+
+  function handlePlay(nextSquares) {
+    // 履歴を書き換える（戻ったところまでの履歴までは保存して、その後の履歴は消す）
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
+    setXIsNext(!xIsNext);
+  }
+
+  // 過去の履歴に戻る
+  function jumpTo(nextMove) {
+    setCurrentMove(nextMove);
+    // currentMove を変更する数値が偶数の場合は、xIsNext を true に設定
+    setXIsNext(nextMove % 2 === 0);
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = "Go to move #" + move;
+    } else {
+      description = "Go to game start";
+    }
+
+    return (
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
   return (
     <div className="game">
       <div className="game-board">
-        <Board />
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <ol>{/*TODO*/}</ol>
+        <ol>{moves}</ol>
       </div>
     </div>
   );
 }
 
-function Board() {
-  // 先手がデフォルトで “X” になるようにするためのstate（次に表示されるのがXかどうかを判断するための状態）
-  const [xIsNext, setXIsNext] = useState(true);
-
+function Board({ xIsNext, squares, onPlay }) {
   // 9つのマス目を配列でもつようにstateを作成
-  const [squares, setSquares] = useState(Array(9).fill(null));
+  // const [squares, setSquares] = useState(Array(9).fill(null));
 
   function handleClick(i) {
     // すでにマス目に表記があれば何もしない（早期リターン）
@@ -38,9 +77,11 @@ function Board() {
       // falseの場合は Xではなく、0を代入
       nextSquares[i] = "0";
     }
+    // setSquares(nextSquares), setXIsNext(!xIsNext) をまとめる
+    onPlay(nextSquares);
     // 状態の更新
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
+    // setSquares(nextSquares);
+    // setXIsNext(!xIsNext);
   }
 
   // 勝者
