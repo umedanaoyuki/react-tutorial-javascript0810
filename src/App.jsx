@@ -9,6 +9,11 @@ export default function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null));
 
   function handleClick(i) {
+    // すでにマス目に表記があれば何もしない（早期リターン）
+    if (squares[i]) {
+      return;
+    }
+
     // squaresという状態を直接変更するのではなく、nextSquaresという新しい配列を作成する
     const nextSquares = squares.slice();
 
