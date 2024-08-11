@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./style.css";
 
 export default function Board() {
@@ -22,7 +23,9 @@ export default function Board() {
   );
 }
 
-function Square({ value }) {
+function Square() {
+  const [value, setValue] = useState(null);
+
   function handleClick() {
     console.log("clicked");
   }
