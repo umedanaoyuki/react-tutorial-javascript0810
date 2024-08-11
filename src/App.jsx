@@ -1,11 +1,16 @@
-import "./App.css";
+// import "./App.css";
 
-function App() {
+// function App() {
+//   return <>テスト</>;
+// }
+
+// export default App;
+
+export default function Square() {
   return (
     <>
-      <h1>テスト</h1>
+      <button className="square">X</button>
+      <button className="square">X</button>
     </>
   );
 }
-
-export default App;
